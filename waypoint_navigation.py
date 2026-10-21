@@ -14,7 +14,7 @@ waypoints = [
     ("D", 40, 10)
 ]
 
-ALT = 5
+ALT = 5                   # relative altitude in meters
 EARTH_RADIUS = 6378137.0  # earth's radius in meters
 
 
@@ -25,9 +25,9 @@ def meters_to_coords(lat, lon, meters_north, meters_east):
     dLon = meters_east / (EARTH_RADIUS * math.cos(lat_rad))
     return lat + math.degrees(dLat), lon + math.degrees(dLon)
 
+
+
 # turns two sets of coordinates into the distance in meters
-
-
 def coords_to_meters(lat1, lat2, lon1, lon2, alt1, alt2):
     lat1_rad = math.radians(lat1)
     lat2_rad = math.radians(lat2)
@@ -56,9 +56,9 @@ def coords_to_meters(lat1, lat2, lon1, lon2, alt1, alt2):
         EARTH_RADIUS * math.cos(lat_rad)
     return meters_north, meters_east
 
+
+
 # find the center of the circle the drone orbits around (between 2 waypoints)
-
-
 def find_orbit_center_cartesian(waypoint1, waypoint2):
     y1, x1 = waypoint1[1], waypoint1[2]
     y2, x2 = waypoint2[1], waypoint2[2]
@@ -68,9 +68,9 @@ def find_orbit_center_cartesian(waypoint1, waypoint2):
 
     return center_vert_pos, center_horiz_pos
 
+
+
 # wait until the drone is within a certain distance of the waypoint before continuing
-
-
 async def wait_until_close(drone, newCoords, ABS_ALT, distance_threshold):
     while True:
         # get the drone's current location
@@ -93,18 +93,18 @@ async def wait_until_close(drone, newCoords, ABS_ALT, distance_threshold):
             break
     return
 
+
+
 # find the distance between two waypoints in meters
-
-
 def distance_between_waypoints(waypoint1, waypoint2):
     y1, x1 = waypoint1[1], waypoint1[2]
     y2, x2 = waypoint2[1], waypoint2[2]
 
     return math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
 
+
+
 # log the drone's postion in meters from the starting point to a CSV file
-
-
 async def log_position(drone, filename="flight_log.csv"):
     start = time.time()
     with open(filename, "w", newline="") as f:
@@ -117,6 +117,8 @@ async def log_position(drone, filename="flight_log.csv"):
             f.flush()  # so data isn't lost if the script crashes
 
 
+
+# log the drone's motor outputs to a CSV file
 async def log_motors(drone, start_time, filename="motor_log.csv"):
     with open(filename, "w", newline="") as f:
         writer = csv.writer(f)
