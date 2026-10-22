@@ -14,7 +14,7 @@ waypoints = [
     ("D", 40, 10)
 ]
 
-ALT = 5                   # relative altitude in meters
+ALT = 10                   # relative altitude in meters
 EARTH_RADIUS = 6378137.0  # earth's radius in meters
 
 
@@ -167,12 +167,10 @@ async def main():
         await drone.action.takeoff()
 
         # wait for drone to reach takeoff height, then break out of loop and continue with waypoint navigation
-        while True:
-            async for pos in drone.telemetry.position():
-                if pos.absolute_altitude_m >= ALT * 0.95:
-                    print(f"Reached target altitude of {ALT} meters")
-                    break
-            break
+        async for pos in drone.telemetry.position():
+            if pos.relative_altitude_m >= ALT * 0.95:
+                print(f"Reached target altitude of {ALT} meters")
+                break
 
         print("Takeoff command sent.")
 
@@ -207,7 +205,7 @@ async def main():
         radius = distance_between_waypoints(waypoints[0], waypoints[-1]) / 2
         print(
             f"Orbiting around center at ({center_lat}, {center_lon}) with radius {radius} meters")
-        await drone.action.do_orbit(radius, 1.0, OrbitYawBehavior.HOLD_INITIAL_HEADING, center_lat, center_lon, ABS_ALT)
+        await drone.action.do_orbit(radius, 10.0, OrbitYawBehavior.HOLD_INITIAL_HEADING, center_lat, center_lon, ABS_ALT)
         await wait_until_close(drone, (startCoords[0], startCoords[1]), ABS_ALT, distance_threshold=1)
         await drone.action.hold()
         await asyncio.sleep(1)
