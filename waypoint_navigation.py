@@ -50,12 +50,6 @@ def coords_to_meters(lat1, lat2, lon1, lon2, alt1, alt2):
 
     return math.sqrt(horizontal_distance ** 2 + vertical_distance ** 2)
 
-    lat_rad = math.radians(start_lat)
-    meters_north = math.radians(lat - start_lat) * EARTH_RADIUS
-    meters_east = math.radians(lon - start_lon) * \
-        EARTH_RADIUS * math.cos(lat_rad)
-    return meters_north, meters_east
-
 
 
 # find the center of the circle the drone orbits around (between 2 waypoints)
